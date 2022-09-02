@@ -15,8 +15,8 @@
 
 <script>
     (function () {
-        let sfs = new URLSearchParams(window.location.hash.split('?')[1]).get('username')
-        console.log(sfs)
-        jQuery('#username').text(sfs)
+        let username = new URLSearchParams(window.location.hash.split('?')[1]).get('username')
+        console.log(username)
+        jQuery('#username').text(username)
     })()
 </script>
