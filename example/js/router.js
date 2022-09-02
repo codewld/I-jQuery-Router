@@ -28,6 +28,9 @@
             const onHashChange = () => {
                 // 获取url中的有效路径参数
                 let hash = location.hash.slice(location.hash.indexOf('#') + 1)
+                if (hash.indexOf('?') !== -1) {
+                    hash = hash.slice(0, hash.indexOf('?'))   
+                }
                 if (hash.charAt(0) === '/') {
                     hash = hash.slice(1)
                 }
