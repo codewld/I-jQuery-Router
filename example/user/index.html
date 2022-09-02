@@ -1,5 +1,7 @@
 <div>
-    USER
+    欢迎回来，
+    <span id="username"></span>
+    ！
     <div style="display: flex;">
         <a href="#/user/center">个人中心</a>
         <a href="#/user/friends">好友</a>
@@ -9,3 +11,12 @@
     <div id="router-view-2"></div>
     
 </div>
+
+
+<script>
+    (function () {
+        let sfs = new URLSearchParams(window.location.hash.split('?')[1]).get('username')
+        console.log(sfs)
+        jQuery('#username').text(sfs)
+    })()
+</script>
