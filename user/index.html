@@ -1,11 +1,14 @@
 <div>
     欢迎回来，
-    <span id="username"></span>
-    ！
-    <div style="display: flex;">
-        <a href="#/user/center">个人中心</a>
-        <a href="#/user/friends">好友</a>
-        <a href="#/home">退出登录</a>
+    <span id="username"></span>！
+    <div class="container">
+        <div class="item" onclick="window.$router.to('/user/center')">个人中心</div>
+
+        <div class="item" onclick="window.$router.to('/user/friends')">好友</div>
+
+        <div class="item" onclick="window.$router.to('/user/friendsRedirect')">好友重定向</div>
+
+        <div class="item" onclick="window.$router.changeHash('/home')">退出登录</div>
     </div>
 
     <div id="router-view-2"></div>
@@ -16,7 +19,6 @@
 <script>
     (function () {
         let username = new URLSearchParams(window.location.hash.split('?')[1]).get('username')
-        console.log(username)
         jQuery('#username').text(username)
     })()
 </script>

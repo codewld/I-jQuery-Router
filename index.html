@@ -12,11 +12,20 @@
 
 <body>
 
-    <a href="#/home">home</a>
+    <div class="container">
+        <div class="item" onclick="window.$router.setParam('username=codewld')">加载参数</div>
 
-    <a href="#/info">info</a>
+        <div class="item" onclick="window.$router.setParam('username=hello')">加载参数2</div>
+    </div>
+    
+    <div class="container">
+        <div class="item" onclick="window.$router.to('/home')">home</div>
 
-    <a href="#/user?username=codewld">user</a>
+        <div class="item" onclick="window.$router.to('/info')">info</div>
+
+        <div class="item" onclick="window.$router.changeHash('/user?username=codewld')">user</div>
+    </div>
+    
 
     <div id="router-view-1"></div>
 
@@ -45,6 +54,9 @@
                 "friends": {
                     "path": "./user/friends/index.html",
                     "son": {}
+                },
+                "friendsRedirect": {
+                    "redirect": "friends"
                 }
             }
         },
@@ -55,5 +67,18 @@
 
     window.$router.initial(routerMap)
 </script>
+
+<style>
+    .container {
+        display: flex;
+        background-color: #eee;
+        margin: 10px 0;
+    }
+
+    .item {
+        background-color: #999;
+        margin: 10px;
+    }
+</style>
 
 </html>
