@@ -4,7 +4,10 @@
 
         constructor() {
             this.routerMap = {}
-            this.pathParams = []
+            this.path = ''
+            this.oldPath = ''
+            this.param = ''
+            this.oldParam = ''
         }
 
         /**
@@ -19,29 +22,39 @@
             }
             jQuery(() => onHashChange())
             window.addEventListener('hashchange', hashchangeEvent => {
-                jQuery(() => onHashChange(hashchangeEvent))
+                jQuery(() => onHashChange())
             })
 
             /**
              * 获取url中的路径参数并进行匹配
              */
-            const onHashChange = (hashchangeEvent) => {
-                let newPathList = []
-                let oldPathList = []
+            const onHashChange = () => {
+                // 路径信息
+                this.oldPath = this.path
+                this.path = getPath(location.hash)
+                let pathList = this.path.split('/')
+                let oldPathList = this.oldPath.split('/')
+
+                // 参数信息
+                this.oldParam = this.param
+                this.param = getParam(location.hash)
+
+                // 生成路径信息
                 let pathInfoList = []
-                if (hashchangeEvent) {
-                    newPathList = getPathList(hashchangeEvent.newURL)
-                    oldPathList = getPathList(hashchangeEvent.oldURL)
-                } else {
-                    newPathList = getPathList(location.hash)
-                }
-                for (let i = 0, startChange = false; i < newPathList.length; i++) {
-                    let isChange = !(startChange === false && i < oldPathList.length && oldPathList[i] === newPathList[i])
+                for (let i = 0, startChange = this.oldParam !== this.param; i < pathList.length; i++) {
+                    let isChange = true
+                    if (startChange === false && i < oldPathList.length && oldPathList[i] === pathList[i]) {
+                        isChange = false
+                    }
+                    if (i === pathList.length - 1 && pathList.length < oldPathList.length) {
+                        isChange = true
+                    }
                     if (isChange) {
                         startChange = true
                     }
+
                     let pathInfo = {
-                        path: newPathList[i],
+                        path: pathList[i],
                         isChange: isChange
                     }
                     pathInfoList.push(pathInfo)
@@ -56,25 +69,30 @@
             }
 
             /**
-             * 将URL转化为路径数组
+             * 获取hash中的路径信息
              */
-            const getPathList = (url) => {
-                // 获取url中的有效路径参数
-                let hash = url.slice(url.indexOf('#') + 1)
-                if (hash.indexOf('?') !== -1) {
-                    hash = hash.slice(0, hash.indexOf('?'))   
+            const getPath = (hash) => {
+                let path = hash.slice(hash.indexOf('#') + 1)
+                if (path.indexOf('?') !== -1) {
+                    path = path.slice(0, path.indexOf('?'))
                 }
-                if (hash.charAt(0) === '/') {
-                    hash = hash.slice(1)
+                if (path.charAt(0) === '/') {
+                    path = path.slice(1)
                 }
-                if (hash.charAt(hash.length - 1) === '/') {
-                    hash = hash.slice(0, hash.length - 1)
+                if (path.charAt(path.length - 1) === '/') {
+                    path = path.slice(0, path.length - 1)
                 }
+                return path
+            }
 
-                // 将路径参数转化为数组
-                let pathList = hash.split('/')
-
-                return pathList
+            /**
+             * 获取hash中的参数信息
+             */
+            const getParam = (hash) => {
+                if (hash.indexOf('?') === -1) {
+                    return ''
+                }
+                return hash.slice(hash.indexOf('?') + 1)
             }
 
             /**
@@ -94,7 +112,6 @@
                         matchRes = tempMatchRes
                     }
 
-                    
                     // 加载匹配到的组件
                     if (pathInfoList[i - 1].isChange) {
                         $('#router-view-' + i).load(matchRes.path, () => {
@@ -112,15 +129,48 @@
         /**
          * 在路径后追加
          */
-        append(str) {
-            location.hash = location.hash + str
+        append(subPath) {
+            setHash(this.path + subPath, this.param)
         }
         
         /**
          * 跳转路径
          */
-        to(str) {
-            location.hash = str
+        to(path) {
+            setHash(path, this.param)
+        }
+
+        /**
+         * 设置参数
+         */
+        setParam(param) {
+            setHash(this.path, param)
+        }
+
+        /**
+         * 直接改变hash
+         */
+        changeHash(hash) {
+            location.hash = hash
+        }
+    }
+
+    const setHash = (path, param) => {
+        if (path.indexOf('?') !== -1) {
+            location.hash = '#404'
+            console.log('路径不准携带参数')
+            return
+        }
+        if (path.charAt(0) === '/') {
+            path = path.slice(1)
+        }
+        if (path.charAt(path.length - 1) === '/') {
+            path = path.slice(0, path.length - 1)
+        }
+        if (param != '') {
+            location.hash = '/' + path + '?' + param
+        } else {
+            location.hash = '/' + path
         }
     }
 
