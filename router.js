@@ -4,8 +4,8 @@
 
         constructor() {
             this.routerMap = {}
-            this.path = ''
-            this.oldPath = ''
+            this.path = undefined
+            this.oldPath = undefined
             this.param = ''
             this.oldParam = ''
         }
@@ -32,8 +32,18 @@
                 // 路径信息
                 this.oldPath = this.path
                 this.path = getPath(location.hash)
-                let pathList = this.path.split('/')
-                let oldPathList = this.oldPath.split('/')
+                let pathList
+                if (this.path !== undefined) {
+                    pathList = this.path.split('/')
+                } else {
+                    pathList = []
+                }
+                let oldPathList
+                if (this.oldPath !== undefined) {
+                    oldPathList = this.oldPath.split('/')
+                } else {
+                    oldPathList = []
+                }
 
                 // 参数信息
                 this.oldParam = this.param
