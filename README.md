@@ -1,11 +1,11 @@
-# jQuery-Router
+# I-jQuery-Router
 基于jQuery的简单路由，适用于单页面富应用开发
 
 
 
 ## 示例
 
-https://codewld.github.io/jQuery-Router
+https://codewld.github.io/I-jQuery-Router
 
 
 
